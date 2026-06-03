@@ -17,10 +17,16 @@ Logs and Metrics
 
 Windows Event ID Cheat Sheet
 4624 - This event occurs when a logon session is created. It generates on the computer that was accessed, where the session was created.(account successfuly logged on)
+
 4625 - Security audit log that records every failed logon attempt on a local Windows system(generates on exact computer login was attempted)
+
 4688 - Generated every time a new process has been created on a Windows system
+
 4697 - This event occurs when a new service was installed into the system
-7045- Crucial system log that records  when a new service or driver is successfully installed on your computer(difference from 4697 is that 7045 is a native System log while 4697 is a Security auditing event)
+
+7045- Crucial system log that records  when a new service or driver is successfully installed on your computer(difference from 4697 is that 7045 is a native System log while 
+4697 is a Security auditing event)
+
 1102 - This event indicates that the Windows Security audit log is cleared
 
 
