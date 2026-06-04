@@ -31,4 +31,4 @@ Windows Event ID Cheat Sheet
 
 
 # Day 2 Notes
-MITRE-ATT&CK-Study-Guide.md
+Detection Engineering Notes
