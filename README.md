@@ -32,3 +32,9 @@ Windows Event ID Cheat Sheet
 
 # Day 2 Notes
 Detection Engineering Notes
+
+What makes a good detection?
+- A good detection is one that catches real adversary behavior with minimal false positives and provides enough context for an analyst to take immediate action.
+
+False positives
+- A false positive is 
