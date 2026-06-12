@@ -1,4 +1,4 @@
-# SIEM-Detection-Engineering-Lab
+f# SIEM-Detection-Engineering-Lab
 Map to MITRE ATT&CK Take 5-10 common attack techniques from the MITRE ATT&amp;CK framework (like T1059 Command &amp; Scripting Interpreter) and write detection logic for each one in Splunk or Elastic. Document each use case with the attack description, detection rule, and expected alert output.
 
 
@@ -37,4 +37,12 @@ What makes a good detection?
 - A good detection is one that catches real adversary behavior with minimal false positives and provides enough context for an analyst to take immediate action.
 
 False positives
-- A false positive is 
+- A false positive occurs when a security tool incorrectly flags harmless, legitimate acitvity as malicious
+- Example: IDS(Intrustion Detection System) flags a sudden spike in traffic as a potential data exflitraiton attempt, but its really just employees using a backup cloud service
+
+False negatives
+- A false negative occurs when a security tool fails to detect a genuine threat or vulnerability, categorizing malicious activity as safe
+- Example: A malware sample that bypasses endpoint detection tools without being flagged
+
+Detection Tuning
+- Detection tuning involves adjusting and optimizing detection systems to improve their accuracy and effectiveness in identifying potential threats
