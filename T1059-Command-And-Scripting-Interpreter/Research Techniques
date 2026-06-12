@@ -47,4 +47,10 @@ Alert Concept
 
 VIDEO AND SCREENSHOTS OF SPL detection and sample logs of T1059:
 
+Importance of Sysmon in process: Sysmon enables process creation, network connections, file creation, and registry changes
+
+The video below will demonstrate me simulating a SOC workflow with SIEM engineering(Splunk), endpoint telemetry understanding(Sysmon) and MITRE ATT&CK mapping(T1059), these type of methods will be implemented for all my use cases & research techniques.
+
+
+
 
