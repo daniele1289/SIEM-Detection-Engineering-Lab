@@ -1,0 +1,50 @@
+USE CASE DRAFT: T1059 - Command and Scripting Interpreter
+
+Adversary definition: Any individual, group, or nation that attempts to gain unauthorized access to inflitrate an organization's networks, data, or systems
+
+ATTACK DESCRIPTION
+Adversaries frequently utilize command-line interpreters such as PowerShell and cmd.exe to execute malicious commands on compromised systems.
+These tools can be effectively used to download malware, gather system information, move laterally across a network, or evade security controls.
+Because PowerShell and Command Prompt are legitimate administrative tools built into Windows, attackers often abuse them to blend in with normal system activity.
+
+ATT&CK Mapping
+Technique ID: T1059
+Technique name: Command and Scripting Interpreter
+
+Tactics:
+- Defense Evasion
+- Execution
+
+Detection Objective
+ Identify suspicious executions of PowerShell or cmd.exe that may indicate malicious activity.
+
+Potential Data Sources
+- Windows Security Logs
+- Sysmon Event Logs
+- Process Creation Events (Event ID 4688)
+- PowerShell Operaitonal Logs
+
+Detection Idea
+Monitor for PowerShell or cmd.exe process creaiton events
+
+Examples of suspicious behavior:
+- Encoded PowerShell commands
+- PowerShell downloading files from the Internet
+- PowerShell spawned by Microsoft Office applicaitons
+- PowerShell launched from unusual directories
+- Excessive  command-line activity from a standard user account
+
+Investigation commands:
+- Who executed the command?
+- What process launched PowerShell?
+- What command-line arguements were used?
+- Did the process create network connections?
+- Did the activity occur during normal business hours?
+
+Alert Concept
+   Generate an alert when PowerShell or cmd.exe executes with suspicious command-line arguements or unusual parent processes
+
+
+VIDEO AND SCREENSHOTS OF SPL detection and sample logs of T1059:
+
+
