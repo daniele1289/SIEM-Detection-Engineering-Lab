@@ -53,6 +53,9 @@ The video below will demonstrate me simulating a SOC workflow with SIEM engineer
 
 
 - Had to download Splunk Enterprise and Sysmon(through Windows Powershell) to run my commands I wanted
+- Had to do the command "dir" in Command Prompt and whoami in PowerShell, 
+
+- https://1drv.ms/i/c/B8F7639251C73B47/IQD7InZzx-S3SqOl0IoZ-FE3AYY3TLxOhv_yIeiEM2DmYoA?e=rlu8Lg
 
 
 
