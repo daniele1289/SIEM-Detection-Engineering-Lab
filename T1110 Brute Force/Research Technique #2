@@ -1,1 +1,32 @@
 
+USE CASE DRAFT: T1110 - Brute Force
+
+
+
+ATTACK DESCRIPTION
+
+
+
+ATT&CK Mapping
+Technique ID: T1110
+Technique name: Brute Force
+
+Tactics:
+
+
+Detection Objective
+
+
+Potential Data Sources
+
+
+Detection Idea
+
+
+Examples of suspicious behavior:
+
+
+Investigation commands:
+
+
+Alert Concept
