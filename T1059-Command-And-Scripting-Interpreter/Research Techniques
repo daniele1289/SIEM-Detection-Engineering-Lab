@@ -45,19 +45,12 @@ Alert Concept
    Generate an alert when PowerShell or cmd.exe executes with suspicious command-line arguements or unusual parent processes
 
 
-VIDEO AND SCREENSHOTS OF SPL detection and sample logs of T1059:
 
 Importance of Sysmon in process: Sysmon enables process creation, network connections, file creation, and registry changes
 
-The video below will demonstrate me simulating a SOC workflow with SIEM engineering(Splunk), endpoint telemetry understanding(Sysmon) and MITRE ATT&CK mapping(T1059), these type of methods will be implemented for all my use cases & research techniques.
 
 
 - Had to download Splunk Enterprise and Sysmon(through Windows Powershell) to run my commands I wanted
 - Had to do the command "dir" in Command Prompt and whoami in PowerShell, EventCode4688 indicates a new process has been created
 
 
-index=* sourcetype=WinEventLog:Security EventCode=4688
-(New_Process_Name="*powershell.exe*" OR New_Process_Name="*cmd.exe*")
-
-(Essentially, this command is run in Splunks searching tool so we can filter a massive pile of Windows logs down to only the ones  that match PowerShell or CMD execution)
-Thus, before filtering we have all process creations showing up such as smss.exe, csrss.exe, etc. After filtering, its shrunk down to 5-20 events focused on powershell.exe and cmd.exe.(before and after shown in the video)
