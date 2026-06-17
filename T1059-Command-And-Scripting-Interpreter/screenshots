@@ -1,1 +1,4 @@
-kkrrf
+<img width="1915" height="1080" alt="Image" src="https://github.com/user-attachments/assets/bab54e15-c378-4e31-bce6-f17d50bd698b" />
+(This is first iteration I ran through, no detection yet this just finds all window process creation events where PowerShell or Command Prompt was launched)
+
+
