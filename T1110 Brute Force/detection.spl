@@ -1,1 +1,20 @@
 
+We start in Splunk Enterprise by finding the failed logons for users.
+
+
+
+After that, we check for succesful login after failures and Identify the Source IPS.
+
+
+
+Following that, we determine the affected systems and find the account sbeing targeted.
+
+
+
+
+
+Finally, we set a condition to monitor the failed authentication attempts.
+
+
+
+Of course, we must shrink the scope the same way a SOC analyst would, giving us our final result.
