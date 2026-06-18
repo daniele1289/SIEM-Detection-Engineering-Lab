@@ -1,20 +1,32 @@
 
-We start in Splunk Enterprise by finding the failed logons for users.
+<img width="1912" height="997" alt="Image" src="https://github.com/user-attachments/assets/0317a2cd-884f-4bef-9e52-11f44085431e" />
+
+This represents the real usernames in the system, for me I have "-" and "LOCAL SERVICE" as usernames so I use those for my detection.
 
 
+Now, we find the failed logons for users, the key commands are Source_Network_Address and Failure_Reason.
 
-After that, we check for succesful login after failures and Identify the Source IPS.
+<img width="1917" height="1022" alt="Image" src="https://github.com/user-attachments/assets/bd56f192-62bb-4e7b-a943-2543078fccac" />
 
-
-
-Following that, we determine the affected systems and find the account sbeing targeted.
-
+<img width="1912" height="1013" alt="Image" src="https://github.com/user-attachments/assets/5ed505c9-bc3a-4efc-9957-a93c3ff8672d" />
 
 
+After that, we check for succesful login after failures. EventCode 4624 represents successful login attempts we want to avoid this, so we check.
+
+<img width="1913" height="1033" alt="Image" src="https://github.com/user-attachments/assets/4a5d495e-c874-4fdf-94c9-44a809dd2126" />
+
+<img width="1912" height="1022" alt="Image" src="https://github.com/user-attachments/assets/edf8b243-22e2-4848-82eb-df2ec2260772" />
 
 
-Finally, we set a condition to monitor the failed authentication attempts.
+For the next step, we simply identify the Source IPs trying to attack our network. In addition to this, we determine the affected systems. We use stats by count ComputerName to determine the system and stats by count Source_Network_Address for the IP, stats count by Account_name for specific users being attacked.
+
+<img width="1918" height="1042" alt="Image" src="https://github.com/user-attachments/assets/6e86741e-b74e-4afa-9927-0158188167b1" />
+
+<img width="1917" height="1016" alt="Image" src="https://github.com/user-attachments/assets/2c36d81a-b30d-467a-87fe-e68483afaeb4" />
+
+<img width="1787" height="446" alt="Image" src="https://github.com/user-attachments/assets/027a8561-6e93-4327-92f4-e7d0233f6ff0" />
 
 
+Finally, we set a condition to monitor the failed authentication attempts. Of course, we must shrink the scope the same way a SOC analyst would, giving us our final result. Since I only have a few failed logins, my main condition is count > 0, otherwise the magnitude would be count > 25 to pinpoint the large amounts of faield attempts. Essentially, this condition ONLY shows accounts with more than 0 failed logon attempts.
 
-Of course, we must shrink the scope the same way a SOC analyst would, giving us our final result.
+<img width="1913" height="1012" alt="Image" src="https://github.com/user-attachments/assets/e6e8b2fd-7747-49d1-85a3-d3f3f7cc2c1c" />
