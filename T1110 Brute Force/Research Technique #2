@@ -38,3 +38,5 @@ Alert Concept
 Alert name: Excessive Failed Logon Attempts Detected
 Trigger Condition: More than 10 failed logins, Within 5 mintues, Against a single account
 Severity: Medium --> Escalate to High if a priveleged account is targeted, multiple accounts are affected, or a successful login(4624) follows the failures
+
+** ENSURE I BLUR OUT/CANCEL OUT ANY PRIVATE INFORMATIOn(my ip address, since my github is public)
