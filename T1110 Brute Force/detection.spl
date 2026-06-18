@@ -1,20 +1,7 @@
-
-We start in Splunk Enterprise by finding the failed logons for users.
-
-
-
-After that, we check for succesful login after failures and Identify the Source IPS.
-
-
-
-Following that, we determine the affected systems and find the account sbeing targeted.
-
-
-
-
-
-Finally, we set a condition to monitor the failed authentication attempts.
-
-
-
-Of course, we must shrink the scope the same way a SOC analyst would, giving us our final result.
+EventCode 4625 = Failed Logon attempt
+Account_Name = account being used during the logon attempt
+stats = one of most important Splunk commands, groups events together and counts them
+Count = counts events
+Source_Network_Address = where did the account login attempt come from?
+ComputerName = the destination machine, which computer recieved the logon attempt
+Failure_Reason = why Windows rejected the login
