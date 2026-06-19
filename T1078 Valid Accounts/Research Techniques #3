@@ -1,1 +1,32 @@
+USE CASE DRAFT: T1078 Valid Accounts
 
+
+
+ATTACK DESCRIPTION
+
+
+ATT&CK Mapping
+Technique ID: T1078
+Technique name: Valid Accounts
+
+Tactics:
+
+
+Detection Objective
+
+
+Potential Data Sources
+
+Detection Idea
+
+
+Examples of suspicious behavior:
+
+
+Investigation commands:
+
+
+Alert Concept
+
+
+** ENSURE I BLUR OUT/CANCEL OUT ANY PRIVATE INFORMATION(my ip address, since my github is public)
