@@ -4,7 +4,7 @@ USE CASE DRAFT: T1110 - Brute Force
 
 
 ATTACK DESCRIPTION
-Adversaries systematically guess passwords or encryption keys using repetitive or iterative mechanisms. Attackers use this approah to gain initial access, escalata priveleges, or move laterally(machine to machine till they find a vulnerability) wihtin a compromised environment.
+Adversaries systematically guess passwords or encryption keys using repetitive or iterative mechanisms. Attackers use this approah to gain initial access, escalate priveleges, or move laterally(machine to machine till they find a vulnerability) wihtin a compromised environment.
 
 
 ATT&CK Mapping
