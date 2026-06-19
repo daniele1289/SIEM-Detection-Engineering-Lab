@@ -3,30 +3,42 @@ USE CASE DRAFT: T1078 Valid Accounts
 
 
 ATTACK DESCRIPTION
-
+Adversaries may obtain and abuse legitimate user credentials to access systems, applications, and network resources. More difficult to detect than brute force attacks, sicne activity appears to originate from authorized users.
 
 ATT&CK Mapping
 Technique ID: T1078
 Technique name: Valid Accounts
 
 Tactics:
-
+- Initial Access(TA0001) - adversary trying to get into your network
+- Privelege Escalation(TA0004) - adversary trying to gain higher level permissions
+- Command and Control(TA0011) - adversary trying to communicate with compromised systems to control them
 
 Detection Objective
-
+Identify successful logins happening after multiple failed authentication attempts, which may indicate a hacker succesfully guessed or obtaiend valid credentials
 
 Potential Data Sources
+EventID 4648 - Logon using Explicit Credentials
+EventID 4672 - Special Priveleges Assigned
+EventID 4625 - Failed Logon
+EventID 4624 - Succesful Logon
 
 Detection Idea
-
+Identify accounts that experience multiple failed logons followed by a succesful authentification
 
 Examples of suspicious behavior:
+- Multiple failures followed by a success
+- Successful Login from New System
+- Administrative Login After Repeated Failures
 
 
 Investigation commands:
-
+Successful Logins --> Failed and Successful Logins Together --> Most Active Accounts --> Priveleged Logins
 
 Alert Concept
 
+Succeccful Authentication Following Failed Logins
+Trigger Condition: 1 or more EventID 4624 or 4625 events, followed by Event ID 4624, same account, Within a defined time window
+Severity: Medium  --> High if Administrator account involved, domain admin involved, login originates from unusual host, priveleged activity follows authentication(any of these occur)
 
 ** ENSURE I BLUR OUT/CANCEL OUT ANY PRIVATE INFORMATION(my ip address, since my github is public)
