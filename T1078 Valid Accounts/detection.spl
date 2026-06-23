@@ -4,3 +4,17 @@ search - Filtering results
 where - threshold logic
 sort - Prioritization
 
+
+(EventCode=4624 OR EventCode=4625)
+| stats count by Account_Name EventCode
+( this is SPL QUERY- Counts successful and failed login events for each account to identify authentication activity patterns.)
+
+(EventCode=4624 OR EventCode=4625)
+| stats values(EventCode) as Events by Account_Name
+| search Events=4624 Events=4625
+(Improved detection - Identifies accounts that experienced both failed and successful logins, which may indicate a successful credential compromise attempt.)
+
+Succesful Logins- Displays successful login events to determine which accounts accessed systems and when. -->  Failed and succesful together - Shows the sequence of successful and failed authentication attempts to identify suspicious login patterns.
+--> Most active accounts- Identifies accounts generating the highest number of successful logins, helping analysts prioritize unusual activity. --> Priveleged Logins - Displays accounts that received special administrative privileges, helping identify potentially sensitive or high-risk logins.
+
+MAIN GOAL FOR SOC ANALYST: Determine whether a successful login following failed authentication attempts represents legitimate user activity or potential unauthorized access using valid credentials.
