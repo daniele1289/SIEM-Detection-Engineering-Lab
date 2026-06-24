@@ -1,1 +1,15 @@
 
+Detection logic:
+
+Verify Windows Logon Exists--> View Relevant Fields & Count Logon Types ->Find Remote Desktop Logons -> Investigate Failed Remote Logons-> Look for Brute Force then Success--> See which users logon most --> see which systems recieve logins
+
+
+EventCode – Identifies successful or failed authentication events.
+
+Logon_Type – Determines how authentication occurred and was used to identify remote interactive logons (RDP).
+
+Account_Name – Identifies the user account associated with the authentication event.
+
+ComputerName – Identifies the system accessed during the remote connection.
+
+_time – Provides a timeline of authentication activity for investigation purposes.
