@@ -9,28 +9,31 @@ Adversary definition: Any individual, group, or nation that attempts to gain una
 ATTACK DESCRIPTION
 
 Adversaries frequently abuse WMI to execute commands remotely or locally on Windows systems. WMI is a built-in Windows feature used for system management and monitoring but attackers leverage it for: 
-
+- remote command execution across systems
+- lateral movement within a network
+- persistence through event subscriptions
+- executing malicious payloads without dropping obvious files on disk
 
 
 ATT&CK Mapping
 
-Technique ID: T1059
+Technique ID: T1047
 
-Technique name: Command and Scripting Interpreter
+Technique name: Windows Management Instrumentation
 
 
 
 Tactics:
 
-- Defense Evasion
-
 - Execution
+
+- Lateral Movement
 
 
 
 Detection Objective
 
- Identify suspicious executions of PowerShell or cmd.exe that may indicate malicious activity.
+ Identify suspicious WMI activity that may indicate remote execution, lateral movement, or malicious command execution using WMI services
 
 
 
@@ -38,59 +41,55 @@ Potential Data Sources
 
 - Windows Security Logs
 
-- Sysmon Event Logs
+- Sysmon Logs(Event ID 1- Process Creation, Event ID 3- Network Connections)
 
-- Process Creation Events (Event ID 4688)
+- WMI-Activity Operational Logs
 
-- PowerShell Operaitonal Logs
+- Microsoft-Windows-WMI-Activity/ Operational Event Log
+
+- PowerShell Logs(if WMI invoked via PowerShell)
 
 
 
 Detection Idea
 
-Monitor for PowerShell or cmd.exe process creaiton events
+Monitor for abnormal WMI usage patterns, especially command execution initiated through WMI classes such as: Win32_Process, wmic.exe
 
 
 
 Examples of suspicious behavior:
 
-- Encoded PowerShell commands
+- use of wmic process call create to execute commands remotely
 
-- PowerShell downloading files from the Internet
+-WMI spawning cmd.exe or powershell.exe unexpectedly
 
-- PowerShell spawned by Microsoft Office applicaitons
+- Remote execution of processes via WMI
 
-- PowerShell launched from unusual directories
+- WMI activity initiated from non-admin user accounts
 
-- Excessive  command-line activity from a standard user account
+- Excessive WMI queries across multiple endpoints
+
+- Encoded commands executed via WMI
 
 
 
 Investigation commands:
 
-- Who executed the command?
-
-- What process launched PowerShell?
-
-- What command-line arguements were used?
-
-- Did the process create network connections?
-
-- Did the activity occur during normal business hours?
-
-
-
-Alert Concept
-
-   Generate an alert when PowerShell or cmd.exe executes with suspicious command-line arguements or unusual parent processes
+- Who initiated the WMI activity?
+- What process or user triggered WMI execution?=
+- Was WMI used locally or remotely?
+- What command or payload was executed via WMI?
+- Did WMI spawn child processes(cmd.exe, powershell.exe)
+- Was there lateral movement to other machines using WMI?
+- Was there network connections initiated after WMI execution?
+- Is the activity consistent with known admin tools or schedules?
 
 
 
 
+Alert Name: Suspicious WMI Activity- Potential Remote Execution or Lateral Movement
 
-
-
-Importance of Sysmon in process: Sysmon enables process creation, network connections, file creation, and registry changes
+   Description: This alert is triggered when abnormal Windows Management Instrumentation (WMI) activity is detected that may indicate malicious execution or lateral movement. It includes cases where wmic.exe is used to execute remote commands, WMI spawns suspicious child processes such as PowerShell, Command Prompt, or encoded scripts, or when WMI activity originates from non-administrative or unusual user accounts. The alert also identifies high-volume or repeated WMI execution across multiple endpoints, which may suggest automated lateral movement or reconnaissance behavior within the network.
 
 
 
@@ -98,6 +97,8 @@ Importance of Sysmon in process: Sysmon enables process creation, network connec
 
 
 
-- Had to download Splunk Enterprise and Sysmon(through Windows Powershell) to run my commands I wanted
+
+
+
 
 - Had to do the command "dir" in Command Prompt an," i want you to use the same format and help me create the use case for T1047 WMI"
