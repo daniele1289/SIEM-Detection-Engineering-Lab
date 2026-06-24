@@ -1,1 +1,51 @@
 
+USE CASE DRAFT: T1562 Impair Defenses
+
+
+
+ATTACK DESCRIPTION
+Adversaries attempting to disable, modify, or bypass security controls to avoid detection and maintain persistence within a compromised environment. Relevant examples include disabling antivirus software, stopping logging services, clearing event logs, modifying firewall configurations, or terminating security monitoring tools.
+
+ATT&CK Mapping
+Technique: T1562 - Impair Defenses
+
+Tactics:
+- Defense Evasion
+ 
+
+Detection Objective
+Identify attempts to impair Windows security monitoring by detecting Security Event Log clearing activity, whcih may indicate an attacker attempting to remove evidence of malicious actions.
+
+Potential Data Sources
+- Windows Security Logs
+- Event ID 1102(Security Log Cleared)
+- Sysmon Process Creation Logs
+- Windows Event Viewer
+- Splunk SIEM
+
+Detection Idea
+Continously monitor Event ID 1102 within Windows Security Logs. Thsi event is generated whenever the Security Event Log is cleared and is considered a high-fidelity indicator of potential defense evasion or anti-forensic activity.
+
+Examples of suspicious behavior:
+- Stopping security services
+- Disabling Microsoft Defender
+- Disabling Sysmon logging
+- Modifying Windows Firewall settings
+- Removing or altering security monitoring configurations
+
+
+Investigation commands:
+Verify authorized activity --> Identify users responsible --> Review events preceding the log clearing action --> Investigate for signs of privelege escalation, persistence, or malicious execution --> Determine wheter additional security controls were disabled
+
+Alert Concept: Windows Security Log Clearing
+Description: Detects instances where Windows Security Event Logs have been cleared, potentially indicating an attempt to remove evidence of malicious activity or evade defensive mechanisms
+
+Trigger Condition: One or more occurences of Event ID 1102 detected in Windows Event Security Logs 
+Severity: HIGH
+
+
+IMPORTANT DOCUMENTATION NOTES(CRUCIAL, dont overlook):
+Blur or redact usernames if desired.
+Blur hostnames if they contain personal identifiers.
+Blur IP addresses if publicly accessible.
+Do not include passwords, API keys, account numbers, or personal information in screenshots.
