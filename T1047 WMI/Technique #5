@@ -1,1 +1,103 @@
+USE CASE DRAFT: T1047 - Windows Management Instrumentation
 
+
+
+Adversary definition: Any individual, group, or nation that attempts to gain unauthorized access to inflitrate an organization's networks, data, or systems
+
+
+
+ATTACK DESCRIPTION
+
+Adversaries frequently abuse WMI to execute commands remotely or locally on Windows systems. WMI is a built-in Windows feature used for system management and monitoring but attackers leverage it for: 
+
+
+
+ATT&CK Mapping
+
+Technique ID: T1059
+
+Technique name: Command and Scripting Interpreter
+
+
+
+Tactics:
+
+- Defense Evasion
+
+- Execution
+
+
+
+Detection Objective
+
+ Identify suspicious executions of PowerShell or cmd.exe that may indicate malicious activity.
+
+
+
+Potential Data Sources
+
+- Windows Security Logs
+
+- Sysmon Event Logs
+
+- Process Creation Events (Event ID 4688)
+
+- PowerShell Operaitonal Logs
+
+
+
+Detection Idea
+
+Monitor for PowerShell or cmd.exe process creaiton events
+
+
+
+Examples of suspicious behavior:
+
+- Encoded PowerShell commands
+
+- PowerShell downloading files from the Internet
+
+- PowerShell spawned by Microsoft Office applicaitons
+
+- PowerShell launched from unusual directories
+
+- Excessive  command-line activity from a standard user account
+
+
+
+Investigation commands:
+
+- Who executed the command?
+
+- What process launched PowerShell?
+
+- What command-line arguements were used?
+
+- Did the process create network connections?
+
+- Did the activity occur during normal business hours?
+
+
+
+Alert Concept
+
+   Generate an alert when PowerShell or cmd.exe executes with suspicious command-line arguements or unusual parent processes
+
+
+
+
+
+
+
+Importance of Sysmon in process: Sysmon enables process creation, network connections, file creation, and registry changes
+
+
+
+
+
+
+
+- Had to download Splunk Enterprise and Sysmon(through Windows Powershell) to run my commands I wanted
+
+- Had to do the command "dir" in Command Prompt an," i want you to use the same format and help me create the use case for T1047 WMI"
