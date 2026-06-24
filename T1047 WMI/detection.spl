@@ -3,6 +3,10 @@ MiN DETECTION LINE:
 EventCode=4688
 CommandLine="*wmic*"
 
+index=* Image="*wmic.exe*" CommandLine="*node:*"
+| table _time host user CommandLine ParentImage
+(ANOTHER KEY DETECTION LINE, /node indicates remote execution from users)
+
 
 ParentImage- full path of the process that launched another process(the "parent process")
 unique_hosts - helps detect lateral movement, how widely activity spread across machines
