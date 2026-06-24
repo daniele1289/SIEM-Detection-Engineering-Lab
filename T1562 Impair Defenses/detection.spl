@@ -1,1 +1,14 @@
 
+Verify authorized activity --> Identify users responsible --> Review events preceding the log clearing action --> Investigate for signs of privelege escalation, persistence, or malicious execution --> Determine wheter additional security controls were disabled
+
+
+
+To actually do this use case, I would ahve  to clear the security Log, by opening PowerShell as Administrator and running: Clear-EventLog Security
+
+However, No Event ID 1102 events were observed during testing. The detection logic was developed and validated based on Microsoft Security Event documentation and would trigger upon future log-clearing activity
+
+
+
+index=* sourcetype=WinEventLog:Security EventCode=1102
+| table _time Account_Name ComputerName
+(This would be my SPL Query, creates my telemetry inventory, output proves my lab is behaving normally and no log-clearing events detected during observation period)
