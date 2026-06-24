@@ -1,1 +1,4 @@
 
+MiN DETECTION LINE:
+EventCode=4688
+CommandLine="*wmic*"
