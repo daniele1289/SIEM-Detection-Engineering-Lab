@@ -1,1 +1,53 @@
 
+USE CASE DRAFT: T1021 Remote Services
+
+
+
+ATTACK DESCRIPTION
+Adversaries may use remote services to gain access to systems, execute commands, move laterally across a network, or maintain persistent accesss. Common remote services include Remote Desktop Protocool, Windows Remote Management, Secure Shell, and SMB administrative shares.
+
+ATT&CK Mapping
+Technique: T1021 - Remote Services
+
+Tactics:
+- Lateral Movement
+- Persistence
+- Initial Access
+ 
+
+Detection Objective
+Identify successful remote logons and remote service activity that may indicate unauthorized access or lateral movement between systems
+
+Potential Data Sources
+- Windows Security Logs
+- Event ID 4624(Successful Logon)
+- Event ID 4625(Failed Logon)
+- Sysmon Event Logs
+- Remote Desktop Service Logs
+- Windows Event Viewer
+
+Detection Idea
+Monitor for successful remote logons, particularly Logon Type 10(Remote Interactive/RDP), unusual source systems, or repeated remote access attempts from the same account.
+
+Examples of suspicious behavior:
+- Succesful RDP logon from another system
+- Multiple failed remote logon attempts followed by a successful logon
+- Remote logons occuring outside normal business hours
+- Administrative accounts using remote services unexpectedly
+- A user accessing multiple systems through RDP within a short timeframe
+- Remote access from unusual IP addresses
+
+
+
+Alert Concept: Windows Security Log Clearing
+Description: Generate an alert when a succesful remote logon(Logon Type 10) is detected from an unusual account, system, or time period
+
+Trigger Condition: Succesful Windows Event Logon(Event ID 4624) with Logon Type 10 detected
+Severity: Medium
+
+
+IMPORTANT DOCUMENTATION NOTES(CRUCIAL, dont overlook):
+Blur or redact usernames if desired.
+Blur hostnames if they contain personal identifiers.
+Blur IP addresses if publicly accessible.
+Do not include passwords, API keys, account numbers, or personal information in screenshots
