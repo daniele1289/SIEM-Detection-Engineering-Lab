@@ -39,7 +39,7 @@ Examples of suspicious behavior:
 
 
 
-Alert Concept: Windows Security Log Clearing
+Alert Concept: Potential Unauthorized Remote Access Detected
 Description: Generate an alert when a succesful remote logon(Logon Type 10) is detected from an unusual account, system, or time period
 
 Trigger Condition: Succesful Windows Event Logon(Event ID 4624) with Logon Type 10 detected
