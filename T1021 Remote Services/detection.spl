@@ -13,3 +13,25 @@ Account_Name – Identifies the user account associated with the authentication 
 ComputerName – Identifies the system accessed during the remote connection.
 
 _time – Provides a timeline of authentication activity for investigation purposes.
+
+
+IMPORTANT SPLUNK COMMANDS:
+
+index=* sourcetype=WinEventLog:Security EventCode=4624
+| stats count by Logon_Type
+(investigate which logon types exist in my environment, this baseline query)
+
+index=* sourcetype=WinEventLog:Security EventCode=4625
+| table _time Account_Name ComputerName Failure_Reason
+(this is my faield authentication investigation)
+
+
+index=* sourcetype=WinEventLog:Security EventCode=4624 Logon_Type=10
+| table _time Account_Name ComputerName Logon_Type
+
+(In my case, logon type 10 doesnt exist towards my device, but this would be the code to detect RDP access.)
+
+index=* sourcetype=WinEventLog:Security EventCode=4624
+| table _time Account_Name ComputerName Logon_Type
+| sort -_time
+(This here is my investigation query, designed to identify activity associated with ATT&CK technique Im monitoring, check if someone remotely authenticated to a system)
