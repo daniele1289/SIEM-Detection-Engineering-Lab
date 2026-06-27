@@ -9,13 +9,23 @@ Open command prompt as administator--> schtasks /create /tn "SOCLabTask" /tr "no
 index=* sourcetype=WinEventLog:Security EventCode=4688
 (New_Process_Name="*schtasks.exe*" OR CommandLine="*schtasks*")
 | table _time Account_Name ComputerName New_Process_Name Creator_Process_Name
-(this is the main detection query, 
+(this is the main detection query, Detects execution of schtasks.exe, which is commonly used to create, modify, or delete scheduled tasks. Most important command!!)
 
 
 index=* sourcetype=WinEventLog:Security EventCode=4698
 | table _time Account_Name ComputerName Task_Name
-(Task creaiton events to see which tasks have been recently created)
+(Displays newly created scheduled tasks and identifies the user and system responsible for creating them.)
 
 index=* sourcetype=WinEventLog:Security EventCode=4702
 | table _time Account_Name ComputerName Task_Name
-(Task modification events, to see which have been modified)
+(Shows modifications made to existing scheduled tasks that could indicate persistence or malicious changes.)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+(CommandLine="*schtasks*" AND CommandLine="*powershell*")
+| table _time Account_Name ComputerName CommandLine
+(Detects scheduled tasks configured to execute PowerShell commands, a common persistence technique.)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+(New_Process_Name="*schtasks.exe*" OR CommandLine="*schtasks*")
+| stats count by Account_Name
+(Displays which users are creating or modifying scheduled tasks most frequently.)
