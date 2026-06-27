@@ -1,1 +1,21 @@
+To simulate that this technique works, I will create scheduled task events manually for my home lab
 
+Open command prompt as administator--> schtasks /create /tn "SOCLabTask" /tr "notepad.exe" /sc once /st 23:59(creates Task Name: SOCLabTask Program: notepad.exe Schedule: One time at 11:59 PM)
+
+- schtasks /query | findstr SOCLabTask (to see if task exists and was created successfully)
+
+
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+(New_Process_Name="*schtasks.exe*" OR CommandLine="*schtasks*")
+| table _time Account_Name ComputerName New_Process_Name Creator_Process_Name
+(this is the main detection query, 
+
+
+index=* sourcetype=WinEventLog:Security EventCode=4698
+| table _time Account_Name ComputerName Task_Name
+(Task creaiton events to see which tasks have been recently created)
+
+index=* sourcetype=WinEventLog:Security EventCode=4702
+| table _time Account_Name ComputerName Task_Name
+(Task modification events, to see which have been modified)
