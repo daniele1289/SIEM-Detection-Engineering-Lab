@@ -1,2 +1,60 @@
 
 (this is a crucial one, important I understand deeply, put in vast effort)
+
+USE CASE DRAFT: T1053 Scheduled Task
+
+
+
+ATTACK DESCRIPTION
+Adversaries may create or modify scheduled tasks to execute malicious programs at specific times or during system startup. Scheduled tasks are commonly abused to establish persistence, execute malware, maintain access to compromised systems, or run malicious commands without requiring continous user interaction. Attackers ofen leverage scheduled tasks since they are legitimate administrative features built into Windows.
+
+ATT&CK Mapping
+Technique ID: T1053
+Technique name: Scheduled Tasks
+
+Tactics:
+- Persistence(TA0003) - adversary attempting to maintain access after intial compromise
+- Privelege Escalation(TA0004) - adversary using scheduled tasks to run processes with elevated priveleges
+- Execution(TA0002) - adversary executing malicious code or commands
+
+Detection Objective
+Identify the creation or modification of scheduled tasks that may indicate an attacker establishing persistence or executing malicious activity
+
+Potential Data Sources
+Windows Security Logs
+Sysmon Event Logs
+Event ID 4688 - Process Creation
+Event ID 4698 - scheduled task created
+Event ID 4699 - scheduled task deleted
+Event ID 4700 - scheduled task enabled
+Event ID 4701 - scheduled task disabled
+Event ID 4702 - scheduled task updated
+EventID 4672 - Special Priveleges Assigned
+Microsoft-Windows-TaskScheduler/Operational Logs
+
+Detection Idea
+Monitor for newly created or modified scheduled tasks, especially those executing PowerShell, cmd.exe, scripts, or programs from unusual locations
+
+Examples of suspicious behavior:
+- Creation of a scheduled task running PowerShell
+- Creation of a task executing cmd.exe
+- Scheduled task executing from Temp or AppData directories
+- Scheduled task created shortly after a suspicious login
+- Administrative account creating unexpected tasks
+- Scheduled task names attempting to mimic legitimate Windows tasks
+
+
+Important Investigation commands:
+Search for scheduled task creation events--> Detect use of schtasks.exe 
+
+Alert Concept: Suspicious Scheduled Task Creation or Modification
+
+Succeccful Authentication Following Failed Logins
+Trigger Condition: 1 or more EventID 4698 or Event ID 4702, or execution of schtasks.exe creating or modifying scheduled tasks
+Severity: Medium  --> High if:
+- Administrative accounts involved
+- Task executes PowerShell or cmd.exe
+- Task runs from unusual directories(Temp, AppData, Public)
+- Task is created shortly after suspicious authentication activity
+- Task attempts to mimic legitimate Windows task names
+
