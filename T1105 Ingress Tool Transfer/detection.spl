@@ -1,1 +1,56 @@
+(I had to create my own certutil execution, so had trials and tribulations to get there these were the key commands I used)
+echo. > test.txt (this creates an empty file in directory through Command Line, always run as administrator)
+cd->cd %USERPROFILE%\OneDrive\Desktop(to change my directory to OneDrive path)
+Invoke-WebRequest https://example.com -OutFile test.txt(this in PowerShell as administrator)
+
+KEY Splunk fields:
+risk_tool - categorization field I created using eval case(), used to help map process execution events directly to MITRE ATT&CK techniques; for instance assigns bitsadmin-> T1105, certutil-> T1105
+avg_usage - average number of times a process is executed across your dataset, helps detect unusual activity 
+CommandLine - shows full arguements used with a process, attackers usually hide behaviors through URLS, download commands or encoded payloads
+Parent_Process_Name - what launches the processes, helps detect the attack chains and helps identify phishing execution paths
+
+
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+(New_Process_Name="*certutil*" OR New_Process_Name="*powershell*" OR New_Process_Name="*bitsadmin*" OR New_Process_Name="*curl*")
+| stats count by New_Process_Name Account_Name ComputerName
+| eventstats avg(count) as avg_usage
+| where count < avg_usage
+(MOST IMPORTANT DETECTION,DETECTS UNUSUAL USE OF TRANSFER UTILITIES, shows a deviation from baseline behavior)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| stats count by New_Process_Name Account_Name
+| sort - count
+(HELPS DEFINE NORMAL VS ABNORMAL USAGE, abnormal raises alarms and needs to be looked into)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| eval risk_tool=case(
+like(New_Process_Name,"%certutil%"), "T1105 certutil",
+like(New_Process_Name,"%bitsadmin%"), "T1105 bitsadmin",
+like(New_Process_Name,"%powershell%"), "T1059 powershell",
+like(New_Process_Name,"%curl%"), "T1105 curl",
+true(), "other")
+| stats count by risk_tool
+(HIGH RISK TOOL GROUPING, THIS IS DIRECT MITRE ATT&CK MAPPING)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| search New_Process_Name="*certutil*" OR New_Process_Name="*powershell*"
+| sort _time
+| table _time Account_Name ComputerName New_Process_Name CommandLine Parent_Process_Name
+(this is incident response timeline view)
+
+
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| search certutil OR powershell OR bitsadmin OR curl
+| stats count by New_Process_Name
+(establishes normal usage patterns for file transfer utilities in the environment)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| table _time Account_Name New_Process_Name Creator_Process_Name
+(determines whether the downloaded file was subsequently executed)
+
+index=* EventCode=4688
+| search certutil
+(another important command(first one I used actually), detects certil excution which is a commonly abused Windows Utility used to download malicious files)
 
