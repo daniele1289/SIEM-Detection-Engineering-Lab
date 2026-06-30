@@ -1,1 +1,54 @@
+USE CASE DRAFT: T1003 OS Credential Dumping
 
+
+
+ATTACK DESCRIPTION
+Adversaries may attempt to dump credentials from the operating system to obtain usernames, password hashes, Kerberos tickets, or plaintext credentials stored in memory. Attackers commonly target the Local Security Authority Subsystem Service(LSASS) process because it contains authentication material that can be used for privelege escalation, lateral movement, and persistence.
+
+ATT&CK Mapping
+Technique ID: T1003 
+Technique name: OS Credential Dumping
+
+Tactics:
+- Credential Access(TA0006)
+- Privelege Escalation(TA004)
+- Defense Evasion(TA0005)
+
+Detection Objective
+- Identify attempts to access, dump, or interact with credential stores such as the LSASS process that may indicate credential theft activity
+
+Potential Data Sources
+- Windows Security Logs
+- Sysmon Event Logs
+- Process Creation Events(Event ID 4688)
+- Sysmon Process Access Events(Event ID 10)
+- PowerShell Operational Logs
+- Windows Defender Logs
+
+Detection Idea
+- Monitor for execution of known credential dumping tools and suspicious access to lsass.exe, particularly by processes that do not normally interact with LSASS
+
+Examples of suspicious behavior:
+- Non-system processes accessing LSASS memory
+- Administrative accounts running credential dumping tools
+- Execution of mimikatz.exe
+- Use of procdump.exe agaisnt lsass.exe
+- Creation of lsass.dmp files
+- Access to lsass.exe by PowerShell
+
+
+Investigation commands:
+Detect Mimikatz Execution -> Detect ProcDump Usage-> Detect Access to LSASS-> Investigate User Activity Timeline-> Review Priveleged Logins 
+
+Alert Concept: Suspicious Credential Dumping Activity Detected
+
+Trigger Condition: Execution of credential dumping tools, access to lsass.exe, or creation of LSASS memory dumps
+Severity: HIGH  --> Critical if:
+- Domain Administrator account is involved
+- Multiple credential dumping tools are executed
+- LSASS memory is successfully dumped
+- Suspicious authentication activity follows the dump
+- Activity originates from an unusual host
+
+
+** ENSURE I BLUR OUT/CANCEL OUT AN
