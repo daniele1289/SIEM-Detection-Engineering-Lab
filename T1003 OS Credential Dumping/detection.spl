@@ -1,1 +1,34 @@
+Biggets concern with this techniques deumping credentials onto a personal machine can ne risky and unecessary. Thus, no live credential dumping was generated during testing. Detection logic was developed and validated based on Windows process creation telemetry, Sysmon process access events, and MITRE ATT&CK guidance.Sysmon Process Access events (Event ID 10) were not available in the local lab configuration.
 
+
+KEY SPLUNK COMMANDS THAT WOULD"VE PROVED USEFUL:
+index=* sourcetype=WinEventLog:Security EventCode=4688
+CommandLine="*mimikatz*"
+| table _time Account_Name ComputerName CommandLine
+(Detects execution of Mimikatz, a well-known credential dumping tool.)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+(CommandLine="*procdump*" OR CommandLine="*lsass*")
+| table _time Account_Name ComputerName CommandLine
+(Identifies use of ProcDump to create memory dumps of the LSASS process.)
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=10
+TargetImage="*lsass.exe*"
+| table _time User SourceImage TargetImage GrantedAccess
+(Detects processes attempting to access the LSASS process.)
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational"
+CommandLine="*lsass.dmp*"
+| table _time User Computer CommandLine
+(Identifies creation or usage of LSASS memory dump files.)
+
+index=* sourcetype=WinEventLog:Security EventCode=4688
+| search mimikatz OR procdump OR lsass
+| stats count by New_Process_Name
+(Establishes normal or abnormal usage patterns for credential dumping utilities.)
+
+index=* sourcetype=WinEventLog:Security
+Account_Name="<ACCOUNT_NAME>"
+| table _time EventCode ComputerName
+| sort -_time
+(Builds a timeline of activity for the user account associated with the credential dumping event; signature for many techniques for creating organized data table in spl)
