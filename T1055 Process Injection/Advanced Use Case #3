@@ -15,15 +15,17 @@ Tactics:
 - Defense Evasion(TA0005)
 
 Detection Objective
-- Identify attempts to access, dump, or interact with credential stores such as the LSASS process that may indicate credential theft activity
+- Identify suspicious behavior where a process attempts to manipulate, write into, or execute code within the memory space of another process, especially when done by unusual parent-child process relationships or unsigned binaries
 
 Potential Data Sources
 - Windows Security Logs
 - Sysmon Event Logs
+- Sysmon Event ID 8(CreateRemoteThread)
+- Sysmon Event ID 10(Process Access)
+- Sysmon Event ID 1(Process Creation)
+- Windows Event ID 4688 (Process Creation)
 - Process Creation Events(Event ID 4688)
-- Sysmon Process Access Events(Event ID 10)
 - PowerShell Operational Logs
-- Windows Defender Logs
 
 Detection Idea
 - Monitor for execution of known credential dumping tools and suspicious access to lsass.exe, particularly by processes that do not normally interact with LSASS
