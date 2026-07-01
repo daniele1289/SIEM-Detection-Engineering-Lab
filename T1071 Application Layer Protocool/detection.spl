@@ -1,1 +1,13 @@
+index=* EventCode=4688
+| search NewProcessName="*powershell.exe*"
+| search CommandLine="*http*" OR CommandLine="*Invoke-WebRequest*" OR CommandLine="*Invoke-RestMethod*"
+| table _time Account_Name ComputerName CommandLine ParentProcessName
+(detects powershell web requests)
 
+index=* Account_Name="username"
+| sort _time
+(investigate user activity timeline, replace username with primary computer username for machine)
+
+index=* ("http" OR "https")
+| stats count by ComputerName Account_Name
+(reviews related network activity)
