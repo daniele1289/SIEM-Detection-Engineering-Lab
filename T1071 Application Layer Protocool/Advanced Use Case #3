@@ -1,54 +1,56 @@
-USE CASE DRAFT: T1003 OS Credential Dumping
+USE CASE DRAFT: T1071 Application Layer Protocol
 
 
 
 ATTACK DESCRIPTION
-Adversaries may attempt to dump credentials from the operating system to obtain usernames, password hashes, Kerberos tickets, or plaintext credentials stored in memory. Attackers commonly target the Local Security Authority Subsystem Service(LSASS) process because it contains authentication material that can be used for privelege escalation, lateral movement, and persistence.
+Adversaries may communicate with compromised systems using common application layer protocols such as HTTP or HTTPS to blend malicious traffic with normal network activity. Attackers often use web protocols to download tools, receive commands from a command-and-control (C2) server, exfiltrate data, or maintain persistence because web traffic is generally allowed through firewalls and proxies.
 
 ATT&CK Mapping
-Technique ID: T1003 
-Technique name: OS Credential Dumping
+Technique ID: T1071 
+Technique name: Application Layer Protocol
 
 Tactics:
-- Credential Access(TA0006)
-- Privelege Escalation(TA004)
-- Defense Evasion(TA0005)
+- Command and Control(TA0011)
+- Exfiltration(TA0010)
+
 
 Detection Objective
-- Identify attempts to access, dump, or interact with credential stores such as the LSASS process that may indicate credential theft activity
+- Identify suspicious use of HTTP/HTTPS by command-line utilities, scripting engines, or Living-off-the-Land Binaries (LOLBins) that may indicate command-and-control communication or malicious payload delivery.
 
 Potential Data Sources
 - Windows Security Logs
-- Sysmon Event Logs
+- Sysmon Event Logs(Event ID 1)
 - Process Creation Events(Event ID 4688)
-- Sysmon Process Access Events(Event ID 10)
+- Web Proxy Logs(if available)
 - PowerShell Operational Logs
-- Windows Defender Logs
+- DNS logs(if available)
+- Firewall Logs(if available)
 
 Detection Idea
-- Monitor for execution of known credential dumping tools and suspicious access to lsass.exe, particularly by processes that do not normally interact with LSASS
+- Monitor for processes initiating web requests using command-line tools and scripting engines that do not normally make external HTTP/HTTPS connections.
 
 Examples of suspicious behavior:
-- Non-system processes accessing LSASS memory
-- Administrative accounts running credential dumping tools
-- Execution of mimikatz.exe
-- Use of procdump.exe agaisnt lsass.exe
-- Creation of lsass.dmp files
-- Access to lsass.exe by PowerShell
+- Powershell executing Invoke-WebRequest
+- Powershell executing Invoke-RestMethod
+- curl.exe downloading files from external websites
+- certutil.exe downloading files from URLS
+- bitsadmin.exe transferring files over HTTP/HTTPS
+- mshta.exe reaching out to external websites
+- Encoded Powershell commands containing URLS
+- Repeated connections to unusual domains or IP addresses
 
 
-Investigation commands:
-Detect Mimikatz Execution -> Detect ProcDump Usage-> Detect Access to LSASS-> Investigate User Activity Timeline-> Review Priveleged Logins 
 
-Alert Concept: Suspicious Credential Dumping Activity Detected
+Alert Concept: Suspicious Application Layer Protocol Detected
 
-Trigger Condition: Execution of credential dumping tools, access to lsass.exe, or creation of LSASS memory dumps
+Trigger Condition: Execution of command-line utilities or scripting engines making external HTTP/HTTPS requests, especially when initiated by uncommon parent processes or involving file downloads.
 Severity: HIGH  --> Critical if:
-- Domain Administrator account is involved
-- Multiple credential dumping tools are executed
-- LSASS memory is successfully dumped
-- Suspicious authentication activity follows the dump
-- Activity originates from an unusual host
+- PowerShell downloads a file from an external URL.
+- certutil.exe, bitsadmin.exe, or curl.exe is used to retrieve content from the Internet.
+- Encoded PowerShell commands contain URLs.
+- Multiple download utilities are executed in a short time frame.
+- The web request is followed by execution of a newly downloaded file.
+- Communication occurs with an unknown or suspicious domain.
 
 
 ** ENSURE I BLUR OUT/CANCEL OUT AN
