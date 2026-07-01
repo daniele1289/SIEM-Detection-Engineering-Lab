@@ -28,29 +28,30 @@ Potential Data Sources
 - PowerShell Operational Logs
 
 Detection Idea
-- Monitor for execution of known credential dumping tools and suspicious access to lsass.exe, particularly by processes that do not normally interact with LSASS
+- Monitor for indicators of cross-process interaction where one process accesses or modifies another process's memory space
 
 Examples of suspicious behavior:
-- Non-system processes accessing LSASS memory
-- Administrative accounts running credential dumping tools
-- Execution of mimikatz.exe
-- Use of procdump.exe agaisnt lsass.exe
-- Creation of lsass.dmp files
-- Access to lsass.exe by PowerShell
+- Non-system process opening another process with high priveleges
+- powershell.exe, rundll32.exe, or regsvr32.exe spawning unusual child processes
+- lsass.exe being accessed by non-Microsoft signed binaries
+- Use of APIs such as OpenProcess, WriteProcessMemory, and CreateRemoteThread
+- Injection attempts into explorer.exe, winlogon.exe, lsass.exe, svchost.exe
+- Legitimate applications suddenly spawning child processes in unusual execution chians
 
 
 Investigation commands:
-Detect Mimikatz Execution -> Detect ProcDump Usage-> Detect Access to LSASS-> Investigate User Activity Timeline-> Review Priveleged Logins 
+Detect suspicious process access activity --> Detect remote thread creation --> Detect unusual parent-child relationships--> Detect LSASS access attempts-> Correlate injection + network activity --> Baseline normal process tree behavior
 
-Alert Concept: Suspicious Credential Dumping Activity Detected
+Alert Concept: Suspicious Process Injection Activity
 
-Trigger Condition: Execution of credential dumping tools, access to lsass.exe, or creation of LSASS memory dumps
-Severity: HIGH  --> Critical if:
-- Domain Administrator account is involved
-- Multiple credential dumping tools are executed
-- LSASS memory is successfully dumped
-- Suspicious authentication activity follows the dump
-- Activity originates from an unusual host
+Trigger Condition: Detection of process access or thread creation events indicating one process is attempting to inject or manipulate another process's memory space
+Severity: MEDIUM--> HIGH if:
+- Target process is lsass.exe or a system-critical process
+- Source process is unsigned or unknown
+- Injection involves credential access behavior
+- Remote thread creation is detected (Sysmon Event ID 8)
+- Injection followed by credential dumping, persistence, or network communication
+- Multiple injection techniques observed in sequence
 
 
 ** ENSURE I BLUR OUT/CANCEL OUT AN
